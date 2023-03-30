@@ -29,14 +29,27 @@ const createUsers = async (req, res) => {
         res.status(500).json({ messege: error.messege })
     }
 
-}
 
-const getUserInfoById = async (req, res) => {
-    
 }
+const getUserInfoByID = async (req, res) => {
+    try {
+        const { id } = await req.params;
+        // console.log(id, "is the user");
+        const user = await User.findOne({ _id: id }).populate("allProperties");
+        // console.log(user, "is the user");
+
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: "User not found" });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 export {  
     getAllUsers,
     createUsers,
-    getUserInfoById,
+    getUserInfoByID,
 }
